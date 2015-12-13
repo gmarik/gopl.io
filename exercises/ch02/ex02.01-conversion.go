@@ -32,8 +32,10 @@ func main() {
 		}
 		f := tempconv.Fahrenheit(t)
 		c := tempconv.Celsius(t)
-		fmt.Printf("%s = %s, %s = %s\n",
-			f, tempconv.FToC(f), c, tempconv.CToF(c))
+		k := tempconv.Kelvin(t)
+
+		fmt.Printf("%s = %s, %s = %s, %s = %s, %s = %s\n",
+			f, tempconv.FToC(f), c, tempconv.CToF(c), k, tempconv.KToC(k), k, tempconv.KToF(k))
 	}
 }
 
