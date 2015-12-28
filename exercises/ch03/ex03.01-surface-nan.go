@@ -37,10 +37,14 @@ func main() {
 			bx, by, bok := corner(i, j)
 			cx, cy, cok := corner(i, j+1)
 			dx, dy, dok := corner(i+1, j+1)
-			if aok && bok && cok && dok {
-				fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g'/>\n",
-					ax, ay, bx, by, cx, cy, dx, dy)
+			if !(aok && bok && cok && dok) {
+				// TODO: how do I test it does produce invalid values?
+				fmt.Printf("<!-- Invalid value !>")
+				continue
 			}
+
+			fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g'/>\n",
+				ax, ay, bx, by, cx, cy, dx, dy)
 		}
 	}
 	fmt.Println("</svg>")
@@ -54,10 +58,14 @@ func corner(i, j int) (float64, float64, bool) {
 	// Compute surface height z.
 	z := f(x, y)
 
+	if math.IsInf(z, 0) {
+		return 0, 0, false
+	}
+
 	// Project (x,y,z) isometrically onto 2-D SVG canvas (sx,sy).
 	sx := width/2 + (x-y)*cos30*xyscale
 	sy := height/2 + (x+y)*sin30*xyscale - z*zscale
-	return sx, sy, !math.IsNaN(sx) && !math.IsNaN(sy)
+	return sx, sy, true
 }
 
 func f(x, y float64) float64 {
